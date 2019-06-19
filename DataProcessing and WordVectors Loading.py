@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jun  4 15:57:30 2019
-
-@author: x219427
-"""
-
 import pandas as pd
 import numpy as np
 import json
@@ -206,10 +199,10 @@ encoded_sentence_passage = Bidirectional(LSTM(hidden_size))(encoded_sentence_pas
 question = Input(shape=(40,), dtype='int32')
 encoded_question = Embedding(num_words, EMBEDDING_DIM, weights=[embedding_matrix], trainable = False)(question)
 encoded_question = Bidirectional(LSTM(hidden_size))(encoded_question)
-encoded_question = RepeatVector(700)(encoded_question)
+#encoded_question = RepeatVector(700)(encoded_question)
 
-merge = layers.add([encoded_sentence_passage, encoded_question])
-merge = Bidirectional(LSTM(hidden_size))(merge)
+merge = layers.concatenate([encoded_sentence_passage, encoded_question])
+#merge = Bidirectional(LSTM(hidden_size))(merge)
 predicted = Dense(len(inverse_word_index)+1, activation='softmax')(merge)
 
 model = Model([sentence_passage, question], predicted)
